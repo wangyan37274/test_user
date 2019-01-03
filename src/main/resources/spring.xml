@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 导入spring的约束 spring的IOC约束：beans -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/data/jpa
+        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/test" />
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
+
+    <!--
+        jpa实体操作数据库的实体类
+        原生的jpa的配置信息是必须放在META-INF目录下面的，并且名字必须叫做persistence.xml，
+        这个叫做persistence-unit，就叫做持久化单元，放在这下面我们感觉不方便，不好，
+        于是Spring提供了org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean这样一个类，
+        以让你的随心所欲的起这个配置文件的名字，也可以随心所欲的修改这个文件的位置，只需要在这里指向这个位置就行。
+        然而更加方便的做法是，直接把配置信息就写在这里更好，于是就有了这实体管理器这个bean。
+        使用  <property name="packagesToScan" value="your entity package" /> 这个属性来加载我们的entity。
+    -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="packagesToScan" value="domain"/>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.ejb.naming_strategy" >org.hibernate.cfg.ImprovedNamingStrategy</prop>
+                <prop key="hibernate.dialect" >org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.show_sql" >true</prop>
+                <prop key="hibernate.format_sql" >true</prop>
+                <!--配置是否实体自动生成数据表-->
+                <prop key="hibernate.hbm2ddl.auto" >update</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <jpa:repositories base-package="dao" entity-manager-factory-ref="entityManagerFactory"/>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <context:component-scan base-package="service"/>
+
+    <!--配置支持事务注解-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
