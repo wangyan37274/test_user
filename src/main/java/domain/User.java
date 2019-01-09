@@ -47,6 +47,11 @@ public class User {
     @Column(name="sex")
     private String sex;
 
+
+    @OneToOne(cascade = CascadeType.PERSIST)//和role一对一
+    @JoinColumn(name="role_id")//在创建表时，会创建一个外建role_id
+    private Role role;
+
     public Integer getId() {
         return id;
     }
@@ -93,6 +98,14 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package dao;
 
 import domain.User;
-import org.junit.Before;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,9 +15,10 @@ import java.util.List;
  * @Description: dao
  * @version: 1.0
  */
-public interface UserJpaRepository extends JpaRepository<User,Integer> {
+public interface UserDao extends JpaRepository<User,Integer>,JpaSpecificationExecutor<User> {
 
     /**
+     * 定义自己的方法
      * spring-data-jpa会根据方法的名字来自动生成sql语句，所以，我们必须按照规则定义方法名
      * 比如findByUsername：select * from user where username = ?;
      */
@@ -46,4 +47,9 @@ public interface UserJpaRepository extends JpaRepository<User,Integer> {
     @Modifying
     @Query("update User set username = :username where id = :id")
     void updateUserById(@Param("username")String username ,@Param("id")Integer id);
+
+
+    default User findByUsername0(String name){
+       return findByUsername(name);
+    }
 }

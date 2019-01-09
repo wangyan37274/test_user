@@ -15,7 +15,7 @@
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/test" />
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf8" />
         <property name="username" value="root" />
         <property name="password" value="root" />
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -55,7 +55,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
-    <context:component-scan base-package="service"/>
+    <context:component-scan base-package="service,dao"/>
 
     <!--配置支持事务注解-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
