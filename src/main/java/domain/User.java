@@ -17,8 +17,6 @@ import java.util.Set;
 @Entity
 @Table(name="user")
 public class User {
-    //222
-    //111
     //配置表的id，并且是使用自增
     @Id
     /*
