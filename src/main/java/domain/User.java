@@ -1,6 +1,9 @@
 package domain;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Auther: wangyan
@@ -39,7 +42,7 @@ public class User {
     private String password ;
 
     @Column(name="age")
-    private Integer age;
+    private Long age;
 
     @Column(name="xuexing")
     private String xuexing;
@@ -48,9 +51,15 @@ public class User {
     private String sex;
 
 
-    @OneToOne(cascade = CascadeType.PERSIST)//和role一对一
+    @OneToOne(cascade = CascadeType.PERSIST)//开启级联操作，用谁操作数据库，谁开启级联操作
     @JoinColumn(name="role_id")//在创建表时，会创建一个外建role_id
     private Role role;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    //@JoinTable:配置中间表信息
+    //joinColumns:建立当前表在中间表中的外键字段
+    @JoinTable(name="t_user_teacher",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns=@JoinColumn(name="teacher_id"))
+    private Set<Teacher> teachers = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -92,11 +101,11 @@ public class User {
         this.sex = sex;
     }
 
-    public Integer getAge() {
+    public Long getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(Long age) {
         this.age = age;
     }
 
@@ -108,6 +117,14 @@ public class User {
         this.role = role;
     }
 
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -117,6 +134,14 @@ public class User {
                 ", age=" + age +
                 ", xuexing='" + xuexing + '\'' +
                 ", sex='" + sex + '\'' +
+                ", role=" + role +
                 '}';
     }
+
+    public User(Long age,String sex){
+        this.age = age;
+        this.sex = sex;
+    }
+
+    public User(){}
 }

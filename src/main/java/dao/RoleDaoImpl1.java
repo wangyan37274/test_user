@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @version: 1.0
  */
 @Repository
-public class RoleDaoImpl implements RoleDao{
+public class RoleDaoImpl1 /*implements RoleDao*/{
 
 }
