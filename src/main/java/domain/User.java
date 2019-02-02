@@ -13,8 +13,8 @@ import java.util.Set;
  * @Description: jpa规范的实体类
  * @version: 1.0
  */
-@Entity
 @Data
+@Entity
 @Table(name="user")
 public class User {
     //配置表的id，并且是使用自增
