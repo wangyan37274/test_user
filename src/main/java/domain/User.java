@@ -1,5 +1,7 @@
 package domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -9,6 +11,7 @@ import javax.persistence.*;
  * @version: 1.0
  */
 @Entity
+@Data
 @Table(name="user")
 public class User {
     //配置表的id，并且是使用自增
@@ -51,62 +54,6 @@ public class User {
     @OneToOne(cascade = CascadeType.PERSIST)//和role一对一
     @JoinColumn(name="role_id")//在创建表时，会创建一个外建role_id
     private Role role;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getXuexing() {
-        return xuexing;
-    }
-
-    public void setXuexing(String xuexing) {
-        this.xuexing = xuexing;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     @Override
     public String toString() {
