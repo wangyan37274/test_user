@@ -32,17 +32,43 @@ public interface UserDao extends JpaRepository<User,Integer>,JpaSpecificationExe
     List<User> queryListByName(@Param("username") String username);
 
     /**
-     *  本地sql：nativeQuery = true
+     * jpql：查询部分字段
+     * @param username
+     * @return
      */
-    @Query(nativeQuery = true,value = "select * from user u where u.username = :username")
-    List<User> queryListByName2(@Param("username") String username);
+    @Query("select u.username,u.password from User u where u.username = :username")
+    List<User> queryListByName1(@Param("username") String username);
 
     /**
      *  使用对象传递参数
      *  SPEL表达式：#{#user.username}
      */
     @Query("select u from User u where u.username = :#{#user.username}")
-    List<User> queryListByName3(@Param("user") User user);
+    List<User> queryListByName2(@Param("user") User user);
+
+    /**
+     *  本地sql：nativeQuery = true
+     */
+    @Query(nativeQuery = true,value = "select u.* from user u LEFT JOIN role r ON u.role_id = r.roleid where u.username = :username")
+    List<User> queryListByName3(@Param("username") String username);
+
+    /**
+     *  本地sql：nativeQuery = true
+     *  查询部分字段报错
+     */
+    @Query(nativeQuery = true,value = "select u.username,u.password from user u where u.username = :username")
+    List<User> queryListByName4(@Param("username") String username);
+
+    /**
+     *  本地sql：nativeQuery = true
+     *  使用Object查询部分字段
+     */
+    @Query(nativeQuery = true,value = "select u.username,u.password from user u where u.username = :username")
+    List<Object> queryListByName5(@Param("username") String username);
+
+
+
+
 
     @Modifying
     @Query("update User set username = :username where id = :id")

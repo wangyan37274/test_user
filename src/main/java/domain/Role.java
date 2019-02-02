@@ -1,6 +1,8 @@
 package domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Auther: wangyan
@@ -22,6 +24,10 @@ public class Role {
     @OneToOne(mappedBy="role")
     private User user;
 
+    //一个角色拥有多个权限
+    @OneToMany(mappedBy = "role",cascade = CascadeType.PERSIST)
+    private Set<Authority> auths = new HashSet<>();
+
 
     public Integer getRoleid() {
         return roleid;
@@ -35,21 +41,26 @@ public class Role {
     public void setRolename(String rolename) {
         this.rolename = rolename;
     }
-
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Authority> getAuths() {
+        return auths;
+    }
+
+    public void setAuths(Set<Authority> auths) {
+        this.auths = auths;
     }
 
     @Override
     public String toString() {
         return "Role{" +
                 "roleid=" + roleid +
-                ", rolename='" + rolename + '\'' +
-                ", user=" + user +
+                ", rolename='" + rolename +
                 '}';
     }
 }
